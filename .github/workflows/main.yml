@@ -12,7 +12,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     env:
-      ANDROID_SDK_ROOT: /usr/local/lib/android-sdk
+      ANDROID_SDK_ROOT: /home/runner/android-sdk
 
     steps:
       - name: Checkout
@@ -35,24 +35,4 @@ jobs:
           unzip -q tools.zip
           mv cmdline-tools latest
           yes | latest/bin/sdkmanager --licenses --sdk_root=$ANDROID_SDK_ROOT
-          latest/bin/sdkmanager --sdk_root=$ANDROID_SDK_ROOT "platform-tools" "platforms;android-34" "build-tools;34.0.0"
-
-      - name: Set up Gradle
-        uses: gradle/actions/setup-gradle@v4
-        with:
-          gradle-version: 8.9
-
-      - name: Build debug APK
-        working-directory: SODKillerModern
-        run: gradle assembleDebug --no-daemon
-
-      - name: Determine version tag
-        id: vars
-        run: echo "tag=v1.0.${{ github.run_number }}" >> "$GITHUB_OUTPUT"
-
-      - name: Create Release
-        uses: softprops/action-gh-release@v2
-        with:
-          tag_name: ${{ steps.vars.outputs.tag }}
-          name: "SOD Killer Modern ${{ steps.vars.outputs.tag }}"
-          files: SODKillerModern/app/build/outputs/apk/debug/app-debug.apk
+          latest/bin/sdkmanager --sdk_root=$ANDROID_SDK_ROOT "platform-tools" "platforms;android-34" "build-to
